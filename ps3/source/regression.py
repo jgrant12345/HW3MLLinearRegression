@@ -122,6 +122,9 @@ class PolynomialRegression() :
         
         ### ========== TODO : START ========== ###
         # part 2a: modify to create matrix for simple linear model
+        ones = np.ones((n,1))
+        X = np.append(ones,X, axis=1)
+        
         # part 3a: modify to create matrix for polynomial model
         # professor's solution: 3 lines (yours might be longer if you do not use numpy)
         #
@@ -287,8 +290,8 @@ class PolynomialRegression() :
         ### ========== TODO : START ========== ###
         # part 2b: predict y
         # professor's solution: 1 line
-        
-        y = None
+        # TODO#1 is this right?
+        y = self.coef_ * Phi
         ### ========== TODO : END ========== ###
         
         return y
