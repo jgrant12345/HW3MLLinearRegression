@@ -140,7 +140,7 @@ class PolynomialRegression() :
     
     def fit_SGD(self, X, y, eta=0.1,
                 eps=1e-10, max_iter=int(1e6),
-                verbose=False, plot=False) :
+                verbose=True, plot=False) :
         """
         Finds the coefficients of a {d-1}^th degree polynomial
         that fits the data using least squares stochastic gradient descent.
@@ -194,11 +194,13 @@ class PolynomialRegression() :
                 #
                 # hint: you can simultaneously update all theta using vector math
                 #       (your implementation will be longer if you update sequentially)
-                
+                prediction =np.matmul(Phi , self.coef_)
+                for j in range(len(self.coef_)-1):
+                    self.coef_[j] = self.coef_[j] - eta*(prediction[j]-y[j])*X[i][j]
                 # track error
                 # hint: you cannot use self.predict(...) to make the predictions
                 #       (for your own edification, see if you can figure out why)
-                y_pred = y # change this line, update all predictions (not just this example)
+                y_pred = np.matmul(Phi, self.coef_) # change this line, update all predictions (not just this example)
                 err_list[t] = np.sum(np.power(y - y_pred, 2)) / float(n)
                 ### ========== TODO : END ========== ###
             
@@ -290,8 +292,8 @@ class PolynomialRegression() :
         ### ========== TODO : START ========== ###
         # part 2b: predict y
         # professor's solution: 1 line
-        # TODO#1 is this right?
-        y = self.coef_ * Phi
+        
+        y = np.matmul(Phi ,self.coef_)
         ### ========== TODO : END ========== ###
         
         return y
@@ -313,8 +315,13 @@ class PolynomialRegression() :
         ### ========== TODO : START ========== ###
         # part 2c: compute J(theta)
         # professor's solution: 2 lines
-        
         cost = 0
+        predictions = self.predict(X)
+        difference = self.predict(X) - y
+        for i in difference:
+            cost += (i**2)/2
+
+       
         ### ========== TODO : END ========== ###
         return cost
     
