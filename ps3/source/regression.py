@@ -138,8 +138,8 @@ class PolynomialRegression() :
         return Phi
     
     
-    def fit_SGD(self, X, y, eta=0.1,
-                eps=1e-10, max_iter=int(1e6),
+    def fit_SGD(self, X, y, eta=0.0001,
+                eps=2e-10, max_iter=int(1e6),
                 verbose=True, plot=False) :
         """
         Finds the coefficients of a {d-1}^th degree polynomial
@@ -196,7 +196,7 @@ class PolynomialRegression() :
                 #       (your implementation will be longer if you update sequentially)
                 prediction =np.matmul(Phi , self.coef_)
                 for j in range(len(self.coef_)-1):
-                    self.coef_[j] = self.coef_[j] - eta*(prediction[j]-y[j])*X[i][j]
+                    self.coef_[j] = self.coef_[j] - eta_input*(prediction[j]-y[j])*Phi[i][j]
                 # track error
                 # hint: you cannot use self.predict(...) to make the predictions
                 #       (for your own edification, see if you can figure out why)
@@ -259,11 +259,15 @@ class PolynomialRegression() :
         
         ### ========== TODO : START ========== ###
         # part 2f: update theta (self.coef_) using closed-form solution
+        part1 = np.linalg.inv(np.matmul(np.transpose(Phi), Phi))
+        part2 = np.matmul(np.transpose(Phi), y)
+
+        self.coef_ = np.matmul(part1, part2)
         # part 4a: include L_2 regularization
         # professor's solution: 6 lines
         #
         # hint: use np.dot(...) and np.linalg.pinv(...)
-
+        
         # to aid in grading
         # please put your code without regularization before this line
         # and your code with regularization after this line
